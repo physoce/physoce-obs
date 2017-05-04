@@ -9,6 +9,13 @@ Python tools for working with specific publicly-available oceanographic datasets
 * nerr.py module - National Estuarine Research Reserve data
 * elkhorn.py module - Elkhorn Slough Reserve GIS data
 
+## Requirements
+
+In addition to numpy, scipy, matplotlib and standard Python packages, some functions or options may require:
+* [physoce-py](https://github.com/physoce/physoce-py)
+* [pandas](http://pandas.pydata.org/)
+* [xarray](http://xarray.pydata.org/en/stable/)
+
 ## Installation
 
 #### Inititialize git repository
