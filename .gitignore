@@ -1,7 +1,7 @@
 *.DS_Store
 .idea
 *.pyc
-physoce.egg-info
+physoce_obs.egg-info
 build/
 dist/
 .cache/

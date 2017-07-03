@@ -8,13 +8,14 @@ Python tools for working with specific publicly-available oceanographic datasets
 * lobo.py module - MBARI LOBO mooring data
 * nerr.py module - National Estuarine Research Reserve data
 * elkhorn.py module - Elkhorn Slough Reserve GIS data
+* noaatide.py module - NOAA CO-OPS tide gauge data
 
 ## Requirements
 
 In addition to numpy, scipy, matplotlib and standard Python packages, some functions or options may require:
 * [physoce-py](https://github.com/physoce/physoce-py)
 * [pandas](http://pandas.pydata.org/)
-* [xarray](http://xarray.pydata.org/en/stable/)
+* [xarray](http://xarray.pydata.org/)
 
 ## Installation
 
