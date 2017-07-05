@@ -1,13 +1,15 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import os
+from glob import glob
 try:
     # For Python 3
     from urllib.request import urlretrieve
 except ImportError:
     # Fall back to Python 2 urllib
     from urllib import urlretrieve
+try:
+    import pandas as pd
+except ImportError:
+	pass
 
 def download_hourly_csv(out_file,begin_date,end_date,station,product='water_level',datum='STND'):
     """Download hourly water level csv file from NOAA CO-OPS website.
@@ -92,3 +94,20 @@ def download_multiyear_csv(out_dir,years,station,product='water_level',datum='ST
         begin_date = str(year)+'0101'
         end_date = str(year)+'1231'
         download_hourly_csv(out_file,begin_date,end_date,station,product,datum)
+        
+def csv_to_dataframe(data_dir,pattern='*.csv'):
+    ''' Create pandas dataframe from directory of NOAA tide gauge csv files. Useful
+    for combining and loading csv files created by noaatide.download_multiyear_csv()
+    because individual files are limited to 365 days for hourly data.
+    
+    Inputs:
+        data_dir - path to directory where csv files are located 
+        pattern - pattern indicating which files to use (default '*.csv')
+    '''
+    file_list = glob(os.path.join(data_dir,pattern))
+    df = pd.DataFrame()
+    dflist = []
+    for file in file_list:
+        dflist.append(pd.read_csv(file,usecols=[0,1],index_col=0,parse_dates=True))
+    df = pd.concat(dflist)
+    return df
