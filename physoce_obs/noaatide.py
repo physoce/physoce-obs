@@ -108,6 +108,6 @@ def csv_to_dataframe(data_dir,pattern='*.csv'):
     df = pd.DataFrame()
     dflist = []
     for file in file_list:
-        dflist.append(pd.read_csv(file,usecols=[0,1],index_col=0,parse_dates=True))
+        dflist.append(pd.read_csv(file,usecols=[0,1],index_col=0,parse_dates=True,skipinitialspace=True))
     df = pd.concat(dflist)
     return df
