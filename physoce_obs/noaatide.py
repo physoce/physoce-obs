@@ -57,8 +57,9 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
     
     # check whether data file is valid
     f = open(out_file, 'r')
-    line = f.readline()
-    if not line.startswith('Date Time,'):
+    line1 = f.readline()
+    line2 = f.readline()
+    if (not line1.startswith('Date Time,')) or (line2.startswith('Error')):
         print('Warning: not a valid file: '+out_file)
         print(f.read()) # print error message in file
         os.remove(out_file) 
