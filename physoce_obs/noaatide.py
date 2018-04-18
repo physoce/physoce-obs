@@ -11,7 +11,7 @@ try:
 except ImportError:
 	pass
 
-def download_hourly_csv(out_file,begin_date,end_date,station,product='water_level',datum='STND'):
+def download_hourly_csv(out_file,begin_date,end_date,station,product='water_level',datum='STND',time_zone='GMT'):
     """Download hourly water level csv file from NOAA CO-OPS website.
     Uses API described at https://tidesandcurrents.noaa.gov/api
     
@@ -26,6 +26,7 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
                   (default 'water_level')
         datum - string (default 'STND' for station datum, see API link for more info/options)
                 only used if product='water_level'
+        time_zone - string (default 'GMT')
     """
     
     base_url = 'https://tidesandcurrents.noaa.gov'
@@ -37,7 +38,7 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
         '&end_date='+end_date+\
         '&datum='+datum+\
         '&station='+station+\
-        '&time_zone=GMT'\
+        '&time_zone='+time_zone+\
         '&units=metric'\
         '&format=csv'
     else:
@@ -47,7 +48,7 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
         '&begin_date='+begin_date+\
         '&end_date='+end_date+\
         '&station='+station+\
-        '&time_zone=GMT'\
+        '&time_zone='+time_zone+\
         '&units=metric'\
         '&interval=h'\
         '&format=csv'
@@ -65,7 +66,7 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
         os.remove(out_file) 
     f.close()
     
-def download_multiyear_csv(out_dir,years,station,product='water_level',datum='STND'):
+def download_multiyear_csv(out_dir,years,station,product='water_level',datum='STND',time_zone='GMT'):
     """Download multiple one-year csv files from NOAA CO-OPS website (one file per year).
     
     * Creates output directory if it does not exist, but its parent directory does exist.
@@ -94,7 +95,7 @@ def download_multiyear_csv(out_dir,years,station,product='water_level',datum='ST
         out_file = out_dir+file_prefix+str(year)+'.csv'
         begin_date = str(year)+'0101'
         end_date = str(year)+'1231'
-        download_hourly_csv(out_file,begin_date,end_date,station,product,datum)
+        download_hourly_csv(out_file,begin_date,end_date,station,product,datum,time_zone)
         
 def csv_to_dataframe(data_dir,pattern='*.csv'):
     ''' Create pandas dataframe from directory of NOAA tide gauge csv files. Useful
