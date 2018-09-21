@@ -106,7 +106,7 @@ def csv_to_dataframe(data_dir,pattern='*.csv'):
         data_dir - path to directory where csv files are located 
         pattern - pattern indicating which files to use (default '*.csv')
     '''
-    file_list = glob(os.path.join(data_dir,pattern))
+    file_list = sorted(glob(os.path.join(data_dir,pattern)))
     df = pd.DataFrame()
     dflist = []
     for file in file_list:
