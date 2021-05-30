@@ -9,6 +9,7 @@ Python tools for working with specific publicly-available oceanographic datasets
 * nerr.py module - National Estuarine Research Reserve data
 * elkhorn.py module - Elkhorn Slough Reserve GIS data
 * noaatide.py module - NOAA CO-OPS tide gauge data
+* nasa.py module - NASA Ocean Color
 
 ## Requirements
 
