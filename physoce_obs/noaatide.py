@@ -11,8 +11,44 @@ try:
 except ImportError:
 	pass
 
+def download_6min_csv(out_file, begin_date, end_date, station, product='water_level', datum='STND', time_zone='GMT'):
+    """Download 6 minute water level or meteorology csv file from NOAA CO-OPS website.
+    Uses API described at https://tidesandcurrents.noaa.gov/api
+
+    Note that there is a limit of 31 days.
+
+    Inputs:
+        out_file - path and name of output file
+        begin_date - 'YYYYMMDD' format (e.g. '20171201')
+        end_date - 'YYYYMMDD' format (e.g. '20171231')
+        station - string (e.g. '9413450' for Monterey)
+        product - 'water_level','air_pressure', 'air_temperature' or 'wind'
+                  (default 'water_level', which corresponds to 'hourly_height' on the NOAA API)
+        datum - string (default 'STND' for station datum, see API link for more info/options)
+                only used if product='water_level'
+        time_zone - string (default 'GMT')
+    """
+
+    # Note: 6 minutes is the default interval, see https://api.tidesandcurrents.noaa.gov/api/prod/
+
+    base_url = 'https://api.tidesandcurrents.noaa.gov'
+    api_url = '/api/prod/datagetter'\
+    '?product='+product+\
+    '&application=NOS.COOPS.TAC.WL'\
+    '&begin_date='+begin_date+\
+    '&end_date='+end_date+\
+    '&station='+station+\
+    '&datum='+datum+\
+    '&time_zone='+time_zone+\
+    '&units=metric'\
+    '&format=csv'
+
+    url = base_url+api_url
+    print(url)
+    _retrieve_file(url,out_file)
+
 def download_hourly_csv(out_file, begin_date, end_date, station, product='water_level', datum='STND', time_zone='GMT'):
-    """Download hourly water level csv file from NOAA CO-OPS website.
+    """Download hourly water level or meteorology csv file from NOAA CO-OPS website.
     Uses API described at https://tidesandcurrents.noaa.gov/api
 
     Note that there is a limit of 365 days.
@@ -29,9 +65,9 @@ def download_hourly_csv(out_file, begin_date, end_date, station, product='water_
         time_zone - string (default 'GMT')
     """
 
-    base_url = 'https://tidesandcurrents.noaa.gov'
-    if product is 'water_level':
-        api_url = '/api/datagetter'\
+    base_url = 'https://api.tidesandcurrents.noaa.gov'
+    if product == 'water_level':
+        api_url = '/api/prod/datagetter'\
         '?product=hourly_height'\
         '&application=NOS.COOPS.TAC.WL'\
         '&begin_date='+begin_date+\
@@ -42,7 +78,7 @@ def download_hourly_csv(out_file, begin_date, end_date, station, product='water_
         '&units=metric'\
         '&format=csv'
     else:
-        api_url = '/api/datagetter'\
+        api_url = '/api/prod/datagetter'\
         '?product='+product+\
         '&application=NOS.COOPS.TAC.WL'\
         '&begin_date='+begin_date+\
