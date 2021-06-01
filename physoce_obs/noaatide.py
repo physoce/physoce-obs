@@ -11,24 +11,24 @@ try:
 except ImportError:
 	pass
 
-def download_hourly_csv(out_file,begin_date,end_date,station,product='water_level',datum='STND',time_zone='GMT'):
+def download_hourly_csv(out_file, begin_date, end_date, station, product='water_level', datum='STND', time_zone='GMT'):
     """Download hourly water level csv file from NOAA CO-OPS website.
     Uses API described at https://tidesandcurrents.noaa.gov/api
-    
+
     Note that there is a limit of 365 days.
-    
+
     Inputs:
         out_file - path and name of output file
         begin_date - 'YYYYMMDD' format (e.g. '20171201')
         end_date - 'YYYYMMDD' format (e.g. '20171231')
         station - string (e.g. '9413450' for Monterey)
         product - 'water_level','air_pressure', 'air_temperature' or 'wind'
-                  (default 'water_level')
+                  (default 'water_level', which corresponds to 'hourly_height' on the NOAA API)
         datum - string (default 'STND' for station datum, see API link for more info/options)
                 only used if product='water_level'
         time_zone - string (default 'GMT')
     """
-    
+
     base_url = 'https://tidesandcurrents.noaa.gov'
     if product is 'water_level':
         api_url = '/api/datagetter'\
@@ -54,8 +54,20 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
         '&format=csv'
 
     url = base_url+api_url
+    _retrieve_file(url,out_file)
+
+def _retrieve_file(url,out_file):
+    '''Helper function to retrieve data through NOAA CO-OPS API
+
+    Used by download_hourly_csv() function. For further information on NOAA CO-OPS API calls, visit https://api.tidesandcurrents.noaa.gov/api/prod/
+
+    Inputs:
+        url - URL which makes a web service call through the API
+        out_file - path and name of output file
+    '''
+
     urlretrieve(url,out_file)
-    
+
     # check whether data file is valid
     f = open(out_file, 'r')
     line1 = f.readline()
@@ -63,47 +75,47 @@ def download_hourly_csv(out_file,begin_date,end_date,station,product='water_leve
     if (not line1.startswith('Date Time,')) or (line2.startswith('Error')):
         print('Warning: not a valid file: '+out_file)
         print(f.read()) # print error message in file
-        os.remove(out_file) 
+        os.remove(out_file)
     f.close()
-    
+
 def download_multiyear_csv(out_dir,years,station,product='water_level',datum='STND',time_zone='GMT'):
     """Download multiple one-year csv files from NOAA CO-OPS website (one file per year).
-    
+
     * Creates output directory if it does not exist, but its parent directory does exist.
     * Files are saved as [station]_[product]_[year].csv (e.g. 9413450_air_pressure_2015.csv)
-    
+
     Inputs:
         out_dir - path and name of output directory
-        years - list of years to download 
+        years - list of years to download
         station - string (e.g. '9413450' for Monterey)
         product - 'water_level','air_pressure', 'air_temperature' or 'wind'
                   (default 'water_level')
         datum - string (default 'STND' for station datum, see API link for more info/options)
                 only used if product='water_level'
     """
-                  
+
     # add trailing slash to directory name, if necessary
     if out_dir[-1] is not ('/' or '\\'):
         out_dir = out_dir+'/'
-    
+
     # create directory if necessary
     if not os.path.isdir(out_dir):
         os.mkdir(out_dir)
-    
+
     file_prefix = station+'_'+product+'_'
     for year in years:
         out_file = out_dir+file_prefix+str(year)+'.csv'
         begin_date = str(year)+'0101'
         end_date = str(year)+'1231'
         download_hourly_csv(out_file,begin_date,end_date,station,product,datum,time_zone)
-        
+
 def csv_to_dataframe(data_dir,pattern='*.csv'):
     ''' Create pandas dataframe from directory of NOAA tide gauge csv files. Useful
     for combining and loading csv files created by noaatide.download_multiyear_csv()
     because individual files are limited to 365 days for hourly data.
-    
+
     Inputs:
-        data_dir - path to directory where csv files are located 
+        data_dir - path to directory where csv files are located
         pattern - pattern indicating which files to use (default '*.csv')
     '''
     file_list = sorted(glob(os.path.join(data_dir,pattern)))
