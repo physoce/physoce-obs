@@ -14,7 +14,7 @@ except ImportError:
 
 def download_6min_csv(out_file, begin_date, end_date, station, product='water_level', datum='STND', time_zone='GMT'):
     """Download 6 minute water level or meteorology csv file from NOAA CO-OPS website.
-    Uses API described at https://tidesandcurrents.noaa.gov/api
+    Uses API described at https://api.tidesandcurrents.noaa.gov/api/prod/
 
     Note that there is a limit of 31 days.
 
@@ -61,7 +61,7 @@ def download_6min_csv(out_file, begin_date, end_date, station, product='water_le
 
 def download_hourly_csv(out_file, begin_date, end_date, station, product='water_level', datum='STND', time_zone='GMT'):
     """Download hourly water level or meteorology csv file from NOAA CO-OPS website.
-    Uses API described at https://tidesandcurrents.noaa.gov/api
+    Uses API described at https://api.tidesandcurrents.noaa.gov/api/prod/
 
     Note that there is a limit of 365 days.
 
@@ -128,6 +128,7 @@ def _retrieve_file(url,out_file):
 
 def download_multiyear_csv(out_dir, years, station, product='water_level', datum='STND', time_zone='GMT'):
     """Download multiple one-year hourly csv files from NOAA CO-OPS website (one file per year).
+    Uses API described at https://api.tidesandcurrents.noaa.gov/api/prod/
 
     * Creates output directory if it does not exist, but its parent directory does exist.
     * Files are saved as [station]_[product]_[year].csv (e.g. 9413450_air_pressure_2015.csv)
@@ -159,6 +160,7 @@ def download_multiyear_csv(out_dir, years, station, product='water_level', datum
 
 def download_multimonth_csv(out_dir, year_start, month_start, year_end, month_end, station, product='water_level', datum='STND', time_zone='GMT'):
     """Download multiple one-month csv files of 6-minute interval data from NOAA CO-OPS website (one file per month).
+    Uses API described at https://api.tidesandcurrents.noaa.gov/api/prod/
 
     * Creates output directory if it does not exist, but its parent directory does exist.
     * Files are saved as [station]_[product]_[year]_[month].csv (e.g. 9413450_water_level_2020_06.csv)
